@@ -159,7 +159,7 @@
             }
         },
 
-
+/*
         "ExistingKeyvaultRGName": {
             "type": "string",
             "metadata": {
@@ -174,7 +174,7 @@
             }
         },
 
-
+*/
 
 
         /*--------------------other resources details-------------------------*/
