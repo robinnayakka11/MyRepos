@@ -1,0 +1,381 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "BusinessOwnerEmail": {
+            "type": "string",
+            "metadata": {
+                "description": "Business Owner Name"
+            }
+        },
+
+        "AppOwnerEmail": {
+            "type": "string",
+            "metadata": {
+                "description": "Application Owner Name"
+            }
+        },
+        "Domain": {
+            "type": "string",
+
+            "metadata": {
+                "description": "Domain of the VM"
+            }
+        },
+        "Location": {
+            "type": "string",
+            "metadata": {
+                "description": "description"
+            }
+        },
+
+        "Department": {
+            "type": "string",
+            "metadata": {
+                "description": "Solution / Development / Test / Production"
+            }
+        },
+
+        "CostCenter": {
+            "type": "string",
+            "metadata": {
+                "description": "5321HQ01 / 5321IND01 / 5321LON01"
+            }
+        },
+
+        "ProjectName": {
+            "type": "string",
+
+            "metadata": {
+                "description": "AD, App, FS"
+            }
+        },
+
+        "AppName": {
+            "type": "string",
+            "defaultValue": "Unassigned",
+            "maxLength": 15,
+            "minLength": 2,
+            "metadata": {
+                "description": "The name of the application"
+            }
+        },
+
+
+        /*--------------------Azure VM details-------------------------*/
+
+        "AvailabilitySet": {
+            "type": "string",
+            "defaultValue": "No",
+            "allowedValues": [ "Yes", "No" ],
+            "metadata": {
+                "description": "Indicator for a high available setup type"
+            }
+        },
+        "Publisher": {
+            "type": "string",
+            "defaultValue": "MicrosoftWindowsServer",
+            "metadata": {
+                "description": "Publisher of the image"
+            }
+        },
+        "OSVersion": {
+            "type": "string",
+            "defaultValue": "2016-Datacenter",
+            "metadata": {
+                "description": "OS version."
+            }
+        },
+        "VMSize": {
+            "type": "string",
+            "defaultValue": "Standard_A2_v2",
+            "metadata": {
+                "description": "Define the VMSize for the VM."
+            }
+        },
+       /* "OsDiskTier": {
+            "type": "string",
+            "defaultValue": "StandardSSD_LRS",
+            "allowedValues": [
+                "StandardSSD_LRS",
+                "Standard_LRS",
+                "Premium_LRS"
+            ],
+            "metadata": {
+                "description": "The Storage type of the data Disks"
+            }
+        },*/
+        "DataDiskProperties": {
+            "type": "array",
+            
+            "metadata": {
+                "description": "Data Disk size in GB"
+            }
+        },
+        "Daily Power On/Off Schedule": {
+            "type": "string",
+            "defaultValue": "Yes",
+            "allowedValues": [ "Yes", "No" ],
+            "metadata": {
+                "description": "Please select if server needs to be included in daily power on/off schedule"
+            }
+        },
+        "PowerOnSchedule": {
+            "type": "int",
+            "defaultValue": 7,
+            "allowedValues": [ 5, 6, 7, 0 ],
+            "metadata": {
+                "description": "Power On time of the VM"
+            }
+        },
+        "PowerOffSchedule": {
+            "type": "int",
+            "defaultValue": 19,
+            "allowedValues": [ 19, 20, 21, 0 ],
+            "metadata": {
+                "description": "Power Off time of the VM"
+            }
+        },
+        "offer": {
+            "type": "string",
+            "defaultValue": "WindowsServer",
+            "metadata": {
+                "description": "Image type of OS"
+            }
+        },
+
+
+        "AdminUsername": {
+            "defaultValue": "enecoadmin",
+            "type": "string",
+            "metadata": {
+                "description": "Name of the local admin account for the Virtual Machine."
+            }
+        },
+        "AdminPassword": {
+            "type": "securestring",
+            "metadata": {
+                "description": "Passowrd local admin account of the Virtual Machine."
+            }
+        },
+
+
+        "ExistingKeyvaultRGName": {
+            "type": "string",
+            "metadata": {
+                "description": "Resource Group Name for the existing Keyvault"
+            }
+        },
+
+        "ExistingKeyvaultName": {
+            "type": "string",
+            "metadata": {
+                "description": "The name of Keyvault of VM"
+            }
+        },
+
+
+
+
+        /*--------------------other resources details-------------------------*/
+
+
+
+
+        "WorkspaceEnable": {
+            "type": "string",
+            "defaultValue": "Yes",
+            "allowedValues": [ "Yes", "No" ],
+            "metadata": {
+                "description": "The condition for OMS workspace enable and disable"
+            }
+        },
+        "WorkspaceRG": {
+            "type": "string",
+            "metadata": {
+                "description": "The name of the OMS workpsace Resource Group"
+            }
+        },
+        "WorkspaceName": {
+            "type": "string",
+            "metadata": {
+                "description": "The name of the OMS workpsace"
+            }
+        },
+        "BackupEnable": {
+            "type": "string",
+            "defaultValue": "Yes",
+            "allowedValues": [ "Yes", "No" ],
+            "metadata": {
+                "description": "The condition for Backup enable and disable"
+            }
+        },
+        "BackupVaultRGName": {
+            "type": "string",
+            "metadata": {
+                "description": "Resource group of the backup vault"
+            }
+        },
+        "BackupVaultName": {
+            "type": "string",
+            "metadata": {
+                "description": "Name of the Backup Vault"
+            }
+        },
+        "BackupFabricName": {
+            "type": "string",
+            "defaultValue": "Azure"
+        },
+        "BackupPolicyName": {
+            "type": "string",
+            "defaultValue": "Daily-full-backup-with-7days-retention",
+            "metadata": {
+                "description": "Types of Backup policy"
+            }
+        },
+
+
+
+        "OMS": {
+            "type": "string",
+            "defaultValue": "MicrosoftMonitoringAgent",
+            "allowedValues": [ "MicrosoftMonitoringAgent", "OmsAgentForLinux" ],
+            "metadata": {
+                "description": "OMS extension type"
+            }
+        },
+        "typeHandlerVersion": {
+            "type": "string",
+            "defaultValue": "1.0",
+            "allowedValues": [ "1.0", "1.6", "1.7", "1.12" ],
+            "metadata": {
+                "description": "OMS handlerversion (1.0=Windows) (1.7=Linux)"
+            }
+        },
+
+
+
+        /*--------------------Additional Config details-------------------------*/
+
+        "PublicIPAddress": {
+            "defaultValue": "Dynamic",
+            "type": "string",
+            "allowedValues": [
+                "None",
+                "Dynamic",
+                "Static"
+            ],
+            "metadata": {
+                "description": "Public IP address allocation"
+            }
+        }
+
+
+    },
+    "functions": [],
+    "variables": {
+        "VMName": "[toLower(concat(parameters('Domain'),parameters('Location'),parameters('ProjectName')))]",
+       "AvailabilitySetName": "[concat(concat(parameters('Domain'),parameters('Location'),parameters('ProjectName'),'-as'))]",
+        "OSDiskname": "[toLower(concat(variables('VMName'),'OSDisk'))]",
+         "PublicIPName": "[toLower(concat(variables('VMName'),'PublicIP'))]",
+        "NICName": "[toLower(concat(variables('VMName'),'NIC'))]"
+       
+      /*"AdminPassword": {
+            "reference": {
+              "keyVault": {
+                "id": "[concat(subscription().id,'/resourceGroups/', parameters('ExistingKeyvaultRGName'),'/providers/Microsoft.KeyVault/vaults/',parameters('ExistingKeyvaultName'))]"
+              },
+              "secretName": "robin"
+            }
+   }*/ 
+    
+      
+    },
+    "resources": [
+
+          /*--------------------windowsVM1storage-------------------------*/
+        /*  {
+            "name": "[toLower('windowsVM1storage')]",
+            "type": "Microsoft.Storage/storageAccounts",
+            "apiVersion": "2019-06-01",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "displayName": "windowsVM1 Storage Account"
+            },
+            "sku": {
+                "name": "Standard_LRS"
+            },
+            "kind": "Storage"
+        },
+       */
+
+        /*--------------------virtualMachines-------------------------*/
+
+
+        {
+            "name": "[variables('VMName')]",
+            "type": "Microsoft.Compute/virtualMachines",
+            "apiVersion": "2019-07-01",
+            "location": "[resourceGroup().location]",
+
+            "tags": {
+                "displayName": "[variables('PublicIPName')]",
+                "BusinessOwnerEmail": "[parameters('BusinessOwnerEmail')]",
+                "AppOwnerEmail": "[parameters('AppOwnerEmail')]",
+                "Domain": "[parameters('Domain')]",
+                "Location": "[parameters('Location')]",
+                "Department": "[parameters('Department')]",
+                "CostCenter": "[parameters('CostCenter')]",
+                "ProjectName": "[parameters('ProjectName')]",
+                "AppName": "[parameters('AppName')]",
+                "Poweronschedule": "[if(equals(parameters('Daily Power On/Off Schedule'), 'Yes'), parameters('PowerOnSchedule'), 'None')]",
+                "Poweroffschedule": "[if(equals(parameters('Daily Power On/Off Schedule'), 'Yes'), parameters('PowerOffSchedule'), 'None')]"
+            },
+
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', toLower('windowsVM1storage'))]",
+                "[resourceId('Microsoft.Network/networkInterfaces', 'windowsVM1-NetworkInterface')]",
+                "[variables('AvailabilitySetName')]"
+            ],
+
+
+            "properties": {
+                "hardwareProfile": {
+                    "vmSize": "[parameters('VMSize')]"
+                },
+                "osProfile": {
+                    "computerName": "[variables('VMName')]",
+                    "adminUsername": "[parameters('AdminUsername')]",
+                    "adminPassword": "[parameters('AdminPassword')]"
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "[parameters('Publisher')]",
+                        "offer": "[parameters('offer')]",
+                        "sku": "[parameters('OSVersion')]",
+                        "version": "latest"
+                    },
+                    "osDisk": {
+                        "name": "[variables('OSDiskname')]",
+                        "caching": "ReadWrite",
+                        "createOption": "FromImage"
+                    }
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces',variables('NICName'))]"
+                        }
+                    ]
+                },
+                "diagnosticsProfile": {
+                    "bootDiagnostics": {
+                        "enabled": true,
+                        "storageUri": "[reference(resourceId('Microsoft.Storage/storageAccounts/', toLower('diagnosticsstorage'))).primaryEndpoints.blob]"
+                    }
+                }
+            }
+        }
+    ],
+    "outputs": {}
+}
