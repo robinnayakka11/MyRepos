@@ -65,25 +65,7 @@
 
         /*--------------------Azure Resource details-------------------------*/
 
-        "ExistingVirtualNetworkRGName": {
-            "type": "string",
-            "metadata": {
-                "description": "Rsource Group Name for the existing Vnet"
-            }
-        },
-
-        "ExistingVirtualNetworkName": {
-            "type": "string",
-            "metadata": {
-                "description": "Existing Vnet Name"
-            }
-        },
-        "ExistingSubnetName": {
-            "type": "string",
-            "metadata": {
-                "description": "The name of Subnet in VNet"
-            }
-        },
+     
 
   /*      "ExistingKeyvaultRGName": {
             "type": "string",
