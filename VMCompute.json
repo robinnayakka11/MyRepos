@@ -210,7 +210,7 @@
                 "description": "The condition for Backup enable and disable"
             }
         },
-        "BackupVaultRGName": {
+      /*  "BackupVaultRGName": {
             "type": "string",
             "metadata": {
                 "description": "Resource group of the backup vault"
@@ -221,7 +221,7 @@
             "metadata": {
                 "description": "Name of the Backup Vault"
             }
-        },
+        },*/ 
         "BackupFabricName": {
             "type": "string",
             "defaultValue": "Azure"
