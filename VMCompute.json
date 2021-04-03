@@ -62,6 +62,7 @@
                 "description": "The name of the application"
             }
         },
+       
 
         /*--------------------Azure Resource details-------------------------*/
 
