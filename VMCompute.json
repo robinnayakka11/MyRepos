@@ -2,6 +2,7 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
+       
         "BusinessOwnerEmail": {
             "type": "string",
             "metadata": {
@@ -17,13 +18,14 @@
         },
         "Domain": {
             "type": "string",
-
+         /*   "allowedValues": [ "RT", "WE", "EE", "NA", "LA", "IT" ],*/
             "metadata": {
                 "description": "Domain of the VM"
             }
         },
         "Location": {
             "type": "string",
+
             "metadata": {
                 "description": "description"
             }
@@ -45,7 +47,7 @@
 
         "ProjectName": {
             "type": "string",
-
+          /*  "allowedValues": [ "DC", "App", "FS" ],*/
             "metadata": {
                 "description": "AD, App, FS"
             }
@@ -61,89 +63,49 @@
             }
         },
 
+        /*--------------------Azure Resource details-------------------------*/
 
-        /*--------------------Azure VM details-------------------------*/
+        "ExistingVirtualNetworkRGName": {
+            "type": "string",
+            "metadata": {
+                "description": "Rsource Group Name for the existing Vnet"
+            }
+        },
 
-        "AvailabilitySet": {
+        "ExistingVirtualNetworkName": {
             "type": "string",
-            "defaultValue": "No",
-            "allowedValues": [ "Yes", "No" ],
             "metadata": {
-                "description": "Indicator for a high available setup type"
+                "description": "Existing Vnet Name"
             }
         },
-        "Publisher": {
+        "ExistingSubnetName": {
             "type": "string",
-            "defaultValue": "MicrosoftWindowsServer",
             "metadata": {
-                "description": "Publisher of the image"
+                "description": "The name of Subnet in VNet"
             }
         },
-        "OSVersion": {
+
+  /*      "ExistingKeyvaultRGName": {
             "type": "string",
-            "defaultValue": "2016-Datacenter",
             "metadata": {
-                "description": "OS version."
+                "description": "Resource Group Name for the existing Keyvault"
             }
         },
-        "VMSize": {
+
+        "ExistingKeyvaultName": {
             "type": "string",
-            "defaultValue": "Standard_A2_v2",
             "metadata": {
-                "description": "Define the VMSize for the VM."
-            }
-        },
-       /* "OsDiskTier": {
-            "type": "string",
-            "defaultValue": "StandardSSD_LRS",
-            "allowedValues": [
-                "StandardSSD_LRS",
-                "Standard_LRS",
-                "Premium_LRS"
-            ],
-            "metadata": {
-                "description": "The Storage type of the data Disks"
+                "description": "The name of Keyvault of VM"
             }
         },*/
-        "DataDiskProperties": {
-            "type": "array",
-            
-            "metadata": {
-                "description": "Data Disk size in GB"
-            }
-        },
-        "Daily Power On/Off Schedule": {
-            "type": "string",
-            "defaultValue": "Yes",
-           
-            "metadata": {
-                "description": "Please select if server needs to be included in daily power on/off schedule"
-            }
-        },
-        "PowerOnSchedule": {
-            "type": "int",
-            "defaultValue": 7,
 
-            "metadata": {
-                "description": "Power On time of the VM"
-            }
-        },
-        "PowerOffSchedule": {
-            "type": "int",
-            "defaultValue": 19,
-         
-            "metadata": {
-                "description": "Power Off time of the VM"
-            }
-        },
-        "offer": {
+        "ExistingStorageAccountName": {
             "type": "string",
-            "defaultValue": "WindowsServer",
+            "defaultValue": "storagediagsb",
             "metadata": {
-                "description": "Image type of OS"
+                "description": "Select the storage account for the Boot Diagnostics"
             }
         },
-
 
         "AdminUsername": {
             "defaultValue": "enecoadmin",
@@ -152,87 +114,184 @@
                 "description": "Name of the local admin account for the Virtual Machine."
             }
         },
-        "AdminPassword": {
-            "type": "securestring",
+
+        /*--------------------Additional Config details-------------------------*/
+
+        "AvailabilitySet": {
+            "type": "string",
+            "defaultValue": "No",
             "metadata": {
-                "description": "Passowrd local admin account of the Virtual Machine."
+                "description": "Should the VM be place in AvSet or not"
             }
         },
 
+        "Publisher": {
+            "type": "string",
+            "defaultValue": "Microsoft",
+            "metadata": {
+                "description": "Publisher of the OS image"
+            }
+        },
 
+        "OSVersion": {
+            "type": "string",
+            "defaultValue": "2016-Datacenter",
+            "metadata": {
+                "description": "OS version.  '2012-R2-Datacenter', '2016-Datacenter', '7.5','Latest'"
+            }
+        },
 
+        "OsDiskTier": {
+            "type": "string",
+            "defaultValue": "StandardSSD_LRS",
+         /*   "allowedValues": [
+                "StandardSSD_LRS",
+                "Standard_LRS",
+                "Premium_LRS"
+            ],*/
+            "metadata": {
+                "description": "The Storage type of the data Disks"
+            }
+        },
 
-        /*--------------------other resources details-------------------------*/
+        "VMSize": {
+            "type": "string",
+            "defaultValue": "Standard_A2_v2",
+            "metadata": {
+                "description": "Define the VMSize for the VM."
+            }
+        },
 
+        "DataDiskProperties": {
+            "type": "string",
+            "metadata": {
+                "description": "Data Disk"
+            }
+        },
 
+        "PublicIPAddress": {
+            "defaultValue": "None",
+            "type": "string",
+          /*  "allowedValues": [
+                "None",
+                "Dynamic",
+                "Static"
+            ],*/
+            "metadata": {
+                "description": "Public IP address allocation"
+            }
+        },
 
+        "Daily Power On/Off Schedule": {
+            "type": "string",
+         /*  "allowedValues": [
+                "Yes",
+                "No"
+            ],*/ 
+            "defaultValue": "Yes",
+
+            "metadata": {
+                "description": "Please select if server needs to be included in daily power on/off schedule"
+            }
+        },
+
+        "PowerOnSchedule": {
+            "type": "int",
+            "defaultValue": 7,
+          /* "allowedValues": [ 5, 6, 7, 0 ],*/ 
+            "metadata": {
+                "description": "PowerON schedule for the VM"
+            }
+        },
+
+        "PowerOffSchedule": {
+            "type": "int",
+            "defaultValue": 19,
+  
+            "metadata": {
+                "description": "PowerOff schedule for the VM"
+            }
+        },
 
         "WorkspaceEnable": {
             "type": "string",
             "defaultValue": "Yes",
-            "allowedValues": [ "Yes", "No" ],
+        /*    "allowedValues": [ "Yes", "No" ],*/ 
             "metadata": {
                 "description": "The condition for OMS workspace enable and disable"
             }
         },
+
         "WorkspaceRG": {
             "type": "string",
             "metadata": {
                 "description": "The name of the OMS workpsace Resource Group"
             }
         },
+
         "WorkspaceName": {
             "type": "string",
             "metadata": {
                 "description": "The name of the OMS workpsace"
             }
         },
+
         "BackupEnable": {
             "type": "string",
             "defaultValue": "Yes",
-            "allowedValues": [ "Yes", "No" ],
+         
             "metadata": {
                 "description": "The condition for Backup enable and disable"
             }
         },
-      /*  "BackupVaultRGName": {
+/*
+        "BackupVaultRGName": {
             "type": "string",
             "metadata": {
                 "description": "Resource group of the backup vault"
             }
         },
+
         "BackupVaultName": {
             "type": "string",
             "metadata": {
                 "description": "Name of the Backup Vault"
             }
-        },*/ 
+        },
+
         "BackupFabricName": {
             "type": "string",
             "defaultValue": "Azure"
         },
+
         "BackupPolicyName": {
             "type": "string",
-            "defaultValue": "Daily-full-backup-with-7days-retention",
             "metadata": {
                 "description": "Types of Backup policy"
             }
         },
-
-
+*/
+        "offer": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Image type of OS 'RHEL' 'WindowsServer','SQL2017-WS2016'"
+            }
+        },
 
         "OMS": {
             "type": "string",
             "defaultValue": "MicrosoftMonitoringAgent",
-            "allowedValues": [ "MicrosoftMonitoringAgent", "OmsAgentForLinux" ],
+
             "metadata": {
                 "description": "OMS extension type"
             }
         },
+
         "typeHandlerVersion": {
             "type": "string",
             "defaultValue": "1.0",
-         
+            
             "metadata": {
                 "description": "OMS handlerversion (1.0=Windows) (1.7=Linux)"
             }
@@ -240,18 +299,20 @@
 
 
 
-        /*--------------------Additional Config details-------------------------*/
+        /*--------------------Credentials-------------------------*/
 
-        "PublicIPAddress": {
-            "defaultValue": "Dynamic",
+
+        /* "_artifactsLocation": {
+            "type": "string"
+        },
+        "_artifactsLocationSasToken": {
+            "type": "string"
+        },
+        */
+        "AdminPassword": {
             "type": "string",
-            "allowedValues": [
-                "None",
-                "Dynamic",
-                "Static"
-            ],
             "metadata": {
-                "description": "Public IP address allocation"
+                "description": "Passowrd local admin account of the Virtual Machine."
             }
         }
 
