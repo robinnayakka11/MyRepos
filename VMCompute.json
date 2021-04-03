@@ -159,22 +159,7 @@
             }
         },
 
-/*
-        "ExistingKeyvaultRGName": {
-            "type": "string",
-            "metadata": {
-                "description": "Resource Group Name for the existing Keyvault"
-            }
-        },
 
-        "ExistingKeyvaultName": {
-            "type": "string",
-            "metadata": {
-                "description": "The name of Keyvault of VM"
-            }
-        },
-
-*/
 
 
         /*--------------------other resources details-------------------------*/
