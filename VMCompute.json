@@ -115,7 +115,7 @@
         "Daily Power On/Off Schedule": {
             "type": "string",
             "defaultValue": "Yes",
-            "allowedValues": [ "Yes", "No" ],
+           
             "metadata": {
                 "description": "Please select if server needs to be included in daily power on/off schedule"
             }
@@ -123,7 +123,7 @@
         "PowerOnSchedule": {
             "type": "int",
             "defaultValue": 7,
-            "allowedValues": [ 5, 6, 7, 0 ],
+
             "metadata": {
                 "description": "Power On time of the VM"
             }
@@ -131,7 +131,7 @@
         "PowerOffSchedule": {
             "type": "int",
             "defaultValue": 19,
-            "allowedValues": [ 19, 20, 21, 0 ],
+         
             "metadata": {
                 "description": "Power Off time of the VM"
             }
@@ -232,7 +232,7 @@
         "typeHandlerVersion": {
             "type": "string",
             "defaultValue": "1.0",
-            "allowedValues": [ "1.0", "1.6", "1.7", "1.12" ],
+         
             "metadata": {
                 "description": "OMS handlerversion (1.0=Windows) (1.7=Linux)"
             }
