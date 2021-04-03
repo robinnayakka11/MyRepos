@@ -271,14 +271,6 @@
             }
         },
 
-        "typeHandlerVersion": {
-            "type": "string",
-            "defaultValue": "1.0",
-            
-            "metadata": {
-                "description": "OMS handlerversion (1.0=Windows) (1.7=Linux)"
-            }
-        },
 
 
 
