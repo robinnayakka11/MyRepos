@@ -117,7 +117,7 @@
         
         },
         "VNetID": 
-        "[resourceId(parameters('ExistingVirtualNetworkRGName'), 'Microsoft.Network/virtualNetworks', parameters('ExistingVirtualNetworkName'))]",
+        "[resourceId(parameters('ExistingVirtualNetworkRGName1'), 'Microsoft.Network/virtualNetworks', parameters('ExistingVirtualNetworkName'))]",
         
       
         "SubnetRef": "[concat(variables('VNetID'),'/subnets/', parameters('ExistingSubnetName'))]",
