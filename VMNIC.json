@@ -64,7 +64,7 @@
 
         /*--------------------Azure Resource details-------------------------*/
 
-        "ExistingVirtualNetworkRGName": {
+        "ExistingVirtualNetworkRGName1": {
             "type": "string",
             "metadata": {
                 "description": "Rsource Group Name for the existing Vnet"
