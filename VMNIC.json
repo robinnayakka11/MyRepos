@@ -34,14 +34,8 @@
             "metadata": {
                 "description": "name of existing subnet name"
             }
-        },
-
-        "vmname": {
-            "type": "string",
-            "metadata": {
-                "description": "name of vm"
-            }
         }
+
     },
     "functions": [],
     "variables": {
