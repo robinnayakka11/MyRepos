@@ -38,8 +38,12 @@
     },
     "functions": [],
     "variables": {
-     "publicipnname": "[concat('publicip','-ip')]"
-    
+     "publicipnname": "[concat('publicip','-ip')]",
+    "piblicipID": {
+        
+"id" : "[resourceId('Microsoft.Network/publicIPAddresses',variables('publicipnname'))]"
+
+    }
     },
     "resources": [
 
@@ -87,7 +91,7 @@
                             "subnet": {
                                 "id": "[resourceId(parameters('vnetresourcegroupname'),'Microsoft.Network/virtualNetworks/subnets',parameters('vnetname'), parameters('subnetname'))]"
                             },
-                            "publicIPAddress": "[if(equals(parameters('publicIPrequired'),'yes'),variables('publicipnname'),json('null'))]"
+                            "publicIPAddress": "[if(equals(parameters('publicIPrequired'),'yes'),variables('piblicipID'),json('null'))]"
                         }
                     }
                 ]
