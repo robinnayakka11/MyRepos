@@ -79,13 +79,12 @@
     "variables": {
 "storagename": "[concat(parameters('Vmname'),'-storage')]",
 
-        "nicname": "[concat('nicname','-nic')]",
+      "nicname": "[concat('nicname','-nic')]",
         "nicid": {
 
             "id": "[resourceId(resourceGroup().location,'/Microsoft.Network/networkInterfaces/',variables('nicname'))]"
 
         }
-
 
     },
     "resources": [
