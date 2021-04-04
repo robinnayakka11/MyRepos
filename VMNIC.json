@@ -2,16 +2,16 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-         /*##########################Public IP Parameters############################*/
+        /*##########################Public IP Parameters############################*/
 
-"publicIPrequired": {
-    "type": "string",
-    "allowedValues": ["yes","no"],
-    "defaultValue": ["yes"],
-    "metadata": {
-        "description": "Public IP required yes/no"
-    }
-},
+        "publicIPrequired": {
+            "type": "string",
+            "allowedValues": [ "yes", "no" ],
+            "defaultValue": [ "yes" ],
+            "metadata": {
+                "description": "Public IP required yes/no"
+            }
+        },
 
 
         /*##########################Vnic Parameters ############################*/
@@ -38,16 +38,16 @@
     },
     "functions": [],
     "variables": {
-     "publicipnname": "[concat('publicip','-ip')]",
-    "piblicipID": {
-        
-"id" : "[resourceId('Microsoft.Network/publicIPAddresses',variables('publicipnname'))]"
+        "publicipnname": "[concat('publicip','-ip')]",
+        "piblicipID": {
 
-    }
+            "id": "[resourceId('Microsoft.Network/publicIPAddresses/',variables('publicipnname'))]"
+
+        }
     },
     "resources": [
 
-         /*##########################Public IP details############################*/
+        /*##########################Public IP details############################*/
 
         {
             "name": "[variables('publicipnname')]",
@@ -55,7 +55,7 @@
             "apiVersion": "2019-11-01",
             "location": "[resourceGroup().location]",
             "condition": "[equals(parameters('publicIPrequired'),'yes')]",
-            
+
             "tags": {
                 "displayName": "[variables('publicipnname')]"
             },
@@ -68,7 +68,7 @@
         },
 
 
-/*##########################Vnic details############################*/
+        /*##########################Vnic details############################*/
 
         {
             "name": "networkInterface1",
@@ -79,9 +79,9 @@
                 "displayName": "networkInterface1"
             },
             "dependsOn": [
-              "[resourceId('Microsoft.Network/publicIPAddresses',variables('publicipnname'))]"
+                "[resourceId('Microsoft.Network/publicIPAddresses',variables('publicipnname'))]"
             ],
-            
+
             "properties": {
                 "ipConfigurations": [
                     {
@@ -108,11 +108,11 @@
             "type": "string",
             "value": "[parameters('vnetresourcegroupname')]"
         },
-    "vnetname": {
+        "vnetname": {
             "type": "string",
             "value": "[parameters('vnetname')]"
-    },
-    "subnetname": {
+        },
+        "subnetname": {
             "type": "string",
             "value": "[parameters('subnetname')]"
 
