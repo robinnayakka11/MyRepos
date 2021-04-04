@@ -1,0 +1,165 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "Vmname": {
+            "type": "string",
+            "metadata": {
+                "description": "Name of the vm"
+            }
+        },
+        "sku": {
+            "type": "string",
+            "defaultValue": "Standard_LRS",
+            "metadata": {
+                "description": "storage sku - Standard_LRS, Premium_LRS, StandardSSD_LRS, UltraSSD_LRS, Premium_ZRS, StandardSSD_ZRS"
+            }
+        },
+        "vmSize": {
+            "type": "string",
+            "defaultValue": "Standard_A2_v2",
+            "metadata": {
+                "description": "size of the vm"
+            }
+        },
+       
+        "adminusername": {
+            "type": "string",
+            "defaultValue": "admintest",
+            "metadata": {
+                "description": "adminusername"
+            }
+        },
+        "adminPassword": {
+            "type": "string",
+            "defaultValue": "Asdf@123456789",
+            "metadata": {
+                "description": "description"
+            }
+        },
+"storageProfilepublisher": {
+    "type": "string",
+    "defaultValue": "MicrosoftWindowsServer",
+    "metadata": {
+        "description": "publisher name"
+    }
+},
+
+
+"storageProfileoffer": {
+    "type": "string",
+    "defaultValue": "WindowsServer",
+    "metadata": {
+        "description": "storageProfileoffer"
+    }
+},
+
+"storageProfilesku": {
+    "type": "string",
+    "defaultValue": "2012-R2-Datacenter",
+    "metadata": {
+        "description": "storageProfilesku"
+    }
+},
+
+"osDiskname": {
+    "type": "string",
+    "defaultValue": "windowsVM1OSDisk",
+    "metadata": {
+        "description": "description"
+    }
+}
+
+
+
+
+        
+    },
+    "functions": [],
+    "variables": {
+"storagename": "[concat(parameters('Vmname'),'-storage')]",
+
+        "nicname": "[concat('nicname','-nic')]",
+        "nicid": {
+
+            "id": "[resourceId(resourceGroup().location,'Microsoft.Network/networkInterfaces',variables('nicname'))]"
+
+        }
+
+
+    },
+    "resources": [
+
+
+        /*#######################VM Storage###################################*/
+{
+    "name": "[toLower(variables('storagename'))]",
+    "type": "Microsoft.Storage/storageAccounts",
+    "apiVersion": "2019-06-01",
+    "location": "[resourceGroup().location]",
+    "tags": {
+        "displayName": "[toLower(variables('storagename'))]"
+    },
+    "sku": {
+        "name": "[parameters('sku')]"
+    },
+    "kind": "Storage"
+},
+
+
+        /*#######################VM compute###################################*/
+
+{
+    "name": "[parameters('Vmname')]",
+    "type": "Microsoft.Compute/virtualMachines",
+    "apiVersion": "2019-07-01",
+    "location": "[resourceGroup().location]",
+    "dependsOn": [
+        "[resourceId('Microsoft.Storage/storageAccounts',toLower(variables('storagename')))]",
+        "[resourceId('Microsoft.Network/networkInterfaces',variables('nicid'))]"
+        
+    ],
+    "tags": {
+        "displayName": "[parameters('Vmname')]"
+    },
+    "properties": {
+        "hardwareProfile": {
+            "vmSize": "[parameters('vmSize')]"
+        },
+        "osProfile": {
+            "computerName": "[parameters('Vmname')]",
+            "adminUsername": "[parameters('adminusername')]",
+            "adminPassword": "[parameters('adminPassword')]"
+        },
+        "storageProfile": {
+            "imageReference": {
+                "publisher": "[parameters('storageProfilepublisher')]",
+                "offer": "[parameters('storageProfileoffer')]",
+                "sku": "[parameters('storageProfilesku')]",
+                "version": "latest"
+            },
+            "osDisk": {
+                "name": "[parameters('osDiskname')]",
+                "caching": "ReadWrite",
+                "createOption": "FromImage"
+            }
+        },
+        "networkProfile": {
+            "networkInterfaces": [
+                {
+                    "id": "[resourceId('Microsoft.Network/networkInterfaces',variables('nicid'))]"
+          }
+            ]
+        },
+        "diagnosticsProfile": {
+            "bootDiagnostics": {
+                "enabled": true,
+                "storageUri": "[reference(resourceId('Microsoft.Storage/storageAccounts/', toLower(variables('storagename')))).primaryEndpoints.blob]"
+            }
+        }
+    }
+}
+
+    ],
+    "outputs": {}
+}
