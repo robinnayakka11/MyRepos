@@ -34,6 +34,13 @@
             "metadata": {
                 "description": "name of existing subnet name"
             }
+        },
+
+        "vmname": {
+            "type": "string",
+            "metadata": {
+                "description": "name of vm"
+            }
         }
     },
     "functions": [],
@@ -43,7 +50,18 @@
 
             "id": "[resourceId('Microsoft.Network/publicIPAddresses/',variables('publicipnname'))]"
 
+        },
+
+
+        "nicname": "[concat('nicname','-nic')]",
+        "nicid": {
+
+            "id": "[resourceId(resourceGroup().location,'Microsoft.Network/networkInterfaces',variables('nicname'))]"
+
         }
+
+
+
     },
     "resources": [
 
@@ -71,12 +89,12 @@
         /*##########################Vnic details############################*/
 
         {
-            "name": "networkInterface1",
+            "name": "[variables('nicname')]",
             "type": "Microsoft.Network/networkInterfaces",
             "apiVersion": "2019-11-01",
             "location": "[resourceGroup().location]",
             "tags": {
-                "displayName": "networkInterface1"
+                "displayName": "[variables('nicname')]"
             },
             "dependsOn": [
                 "[resourceId('Microsoft.Network/publicIPAddresses',variables('publicipnname'))]"
