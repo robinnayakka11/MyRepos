@@ -2,6 +2,13 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
+
+        "vmname": {
+            "type": "string",
+            "metadata": {
+                "description": "Name of the vm"
+            }
+        },
         /*##########################Public IP Parameters############################*/
 
         "publicIPrequired": {
@@ -47,7 +54,7 @@
         },
 
 
-        "nicname": "[concat('nicname','-nic')]"
+        "nicname": "[concat(parameters('vmname'),'-nic')]"
      /*  "nicid": "[resourceId(resourceGroup().name,'/Microsoft.Network/networkInterfaces/',variables('nicname'))]"
 */ 
         
