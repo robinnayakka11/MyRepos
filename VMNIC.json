@@ -75,7 +75,7 @@
                 "displayName": "networkInterface1"
             },
             "dependsOn": [
-              "[resourceId('Microsoft.Network/publicIPAddresses', 'publicIPAddress1')]"
+              "[resourceId('Microsoft.Network/publicIPAddresses',variables('publicipnname'))]"
             ],
             
             "properties": {
