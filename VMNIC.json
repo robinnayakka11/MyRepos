@@ -47,10 +47,10 @@
         },
 
 
-        "nicname": "[concat('nicname','-nic')]"
-       /* "nicid": "[resourceId(resourceGroup().name,'/Microsoft.Network/networkInterfaces/',variables('nicname'))]",
+        "nicname": "[concat('nicname','-nic')]",
+        "nicid": "[resourceId(resourceGroup().name,'/Microsoft.Network/networkInterfaces/',variables('nicname'))]"
 
-        */
+        
 
     },
     
@@ -131,6 +131,10 @@
             "type": "string",
             "value": "[parameters('publicIPrequired')]"
 
+        },
+        "nicid": {
+            "type": "string",
+            "value": "[variables('nicid')]"
         }
     }
 }
