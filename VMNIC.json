@@ -53,7 +53,7 @@
             "condition": "[equals(parameters('publicIPrequired'),'yes')]",
             
             "tags": {
-                "displayName": "publicIPAddress1"
+                "displayName": "[variables('publicipnname')]"
             },
             "properties": {
                 "publicIPAllocationMethod": "Dynamic",
