@@ -2,204 +2,56 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-  "BusinessOwnerEmail": {
+
+        /*##########################Network details############################*/
+        "vnetresourcegroupname": {
             "type": "string",
             "metadata": {
-                "description": "Business Owner Name"
+                "description": "name of existing vnet resource group"
             }
         },
-
-        "AppOwnerEmail": {
+        "vnetname": {
             "type": "string",
             "metadata": {
-                "description": "Application Owner Name"
+                "description": "name of existing vnet"
             }
-        },
-        "Domain": {
-            "type": "string",
 
-            "metadata": {
-                "description": "Domain of the VM"
-            }
+
         },
-        "Location": {
+        "subnetname": {
             "type": "string",
             "metadata": {
-                "description": "description"
-            }
-        },
-
-        "Department": {
-            "type": "string",
-            "metadata": {
-                "description": "Solution / Development / Test / Production"
-            }
-        },
-
-        "CostCenter": {
-            "type": "string",
-            "metadata": {
-                "description": "5321HQ01 / 5321IND01 / 5321LON01"
-            }
-        },
-
-        "ProjectName": {
-            "type": "string",
-
-            "metadata": {
-                "description": "AD, App, FS"
-            }
-        },
-
-        "AppName": {
-            "type": "string",
-            "defaultValue": "Unassigned",
-            "maxLength": 15,
-            "minLength": 2,
-            "metadata": {
-                "description": "The name of the application"
-            }
-        },
-
-
-        /*--------------------Azure Resource details-------------------------*/
-
-        "ExistingVirtualNetworkRGName1": {
-            "type": "string",
-            "metadata": {
-                "description": "Rsource Group Name for the existing Vnet"
-            }
-        },
-
-        "ExistingVirtualNetworkName": {
-            "type": "string",
-            "metadata": {
-                "description": "Existing Vnet Name"
-            }
-        },
-        "ExistingSubnetName": {
-            "type": "string",
-            "metadata": {
-                "description": "The name of Subnet in VNet"
-            }
-        },
-
-
-
-        /*--------------------Additional Config details-------------------------*/
-
-        "PublicIPAddress": {
-            "defaultValue": "Dynamic",
-            "type": "string",
-            "allowedValues": [
-                "None",
-                "Dynamic",
-                "Static"
-            ],
-            "metadata": {
-                "description": "Public IP address allocation"
+                "description": "name of existing subnet name"
             }
         }
-
-
     },
     "functions": [],
     "variables": {
-
-    "VMName": "[toLower(concat(parameters('Domain'),parameters('Location'),parameters('ProjectName')))]",
-
-        "PublicIPName": "[toLower(concat(variables('VMName'),'PublicIP'))]",
-        "NICName": "[toLower(concat(variables('VMName'),'NIC'))]",
-        "PublicIPID": 
-        {
-            
-         "id" :  "[resourceId('Microsoft.Network/publicIPAddresses/',variables('PublicIPName'))]"
-        
-        },
-        "VNetID": 
-        "[resourceId(parameters('ExistingVirtualNetworkRGName1'), 'Microsoft.Network/virtualNetworks', parameters('ExistingVirtualNetworkName'))]",
-        
-      
-        "SubnetRef": "[concat(variables('VNetID'),'/subnets/', parameters('ExistingSubnetName'))]",
-        "subnetid": {"id": "[variables('SubnetRef')]"}
-
-
-
-
-
-
+     
+    
     },
     "resources": [
-
-        /*++++++++++++++++++++++++    PublicIPName    ++++++++++++++++++++++++*/
-
         {
-            "name": "[variables('PublicIPName')]",
-            "type": "Microsoft.Network/publicIPAddresses",
-            "apiVersion": "2019-11-01",
-            "location": "[resourceGroup().location]",
-            "condition": "[not(equals(parameters('PublicIPAddress'),'none'))]",
-
-
-            "tags": {
-                "displayName": "[variables('PublicIPName')]",
-               "BusinessOwnerEmail": "[parameters('BusinessOwnerEmail')]",
-                "AppOwnerEmail": "[parameters('AppOwnerEmail')]",
-                "Domain": "[parameters('Domain')]",
-                "Location": "[parameters('Location')]",
-                "Department": "[parameters('Department')]",
-                "CostCenter": "[parameters('CostCenter')]",
-                "ProjectName": "[parameters('ProjectName')]",
-                "AppName": "[parameters('AppName')]"
-
-
-            },
-            "properties": {
-                "publicIPAllocationMethod": "[parameters('PublicIPAddress')]",
-
-                "dnsSettings": {
-                    "domainNameLabel": "[toLower(variables('VMName'))]"
-                }
-            }
-        },
-
-
-        /*++++++++++++++++++++++++  NIC   ++++++++++++++++++++++++*/
-
-        {
-            "name": "[variables('NICName')]",
+            "name": "networkInterface1",
             "type": "Microsoft.Network/networkInterfaces",
             "apiVersion": "2019-11-01",
             "location": "[resourceGroup().location]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Network/publicIPAddresses',variables('PublicIPName'))]"
-         
-            ],
             "tags": {
-                "displayName": "[variables('NICName')]",
-
-                "BusinessOwnerEmail": "[parameters('BusinessOwnerEmail')]",
-                "AppOwnerEmail": "[parameters('AppOwnerEmail')]",
-                "Domain": "[parameters('Domain')]",
-                "Location": "[parameters('Location')]",
-                "Department": "[parameters('Department')]",
-                "CostCenter": "[parameters('CostCenter')]",
-                "ProjectName": "[parameters('ProjectName')]",
-                "AppName": "[parameters('AppName')]"
-
+                "displayName": "networkInterface1"
             },
+            
             "properties": {
                 "ipConfigurations": [
                     {
                         "name": "ipConfig1",
                         "properties": {
-                            "publicIPAddress": "[if(not(equals(parameters('PublicIPAddress'),'None')),variables('PublicIPID'),json('null'))]",
-                            
                             "privateIPAllocationMethod": "Dynamic",
-                            "subnet": "[variables('subnetid')]"
-                             
+                            "subnet": {
+                                "id": "[resourceId(parameters('vnetresourcegroupname'),'Microsoft.Network/virtualNetworks/subnets',parameters('vnetname'), parameters('subnetname'))]"
+                                
+                                
+                            }
                         }
-                        
                     }
                 ]
             }
@@ -207,19 +59,23 @@
     ],
     "outputs": {
 
+        "Resourcegrouplocation": {
+            "type": "string",
+            "value": "[resourceGroup().location]"
+        },
+        "vnetresourcegroupname": {
+            "type": "string",
+            "value": "[parameters('vnetresourcegroupname')]"
+        },
+    "vnetname": {
+            "type": "string",
+            "value": "[parameters('vnetname')]"
+    },
+    "subnetname": {
+            "type": "string",
+            "value": "[parameters('subnetname')]"
 
-"NICname": {
-    "type": "string",
-    "value": "[variables('NICName')]"
-},
-"location": {
-    "type": "string",
-    "value": "[resourceGroup().location]"
-}
 
-
-
-
-
+        }
     }
 }
