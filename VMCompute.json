@@ -112,7 +112,7 @@
     "location": "[resourceGroup().location]",
     "dependsOn": [
         "[concat(resourceId('Microsoft.Storage/storageAccounts',toLower(variables('storagename'))))]",
-        "[concat(resourceId('Microsoft.Network/networkInterfaces/',variables('nicname')))]"
+       /* "[concat(resourceId('Microsoft.Network/networkInterfaces/',variables('nicname')))]"*/
         
     ],
     "tags": {
