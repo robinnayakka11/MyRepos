@@ -47,7 +47,7 @@
         },
 
 
-        "nicname": "[concat('nicname','-nic')]",
+        "nicname": "[concat('nicname','-nic')]"
        /* "nicid": "[resourceId(resourceGroup().name,'/Microsoft.Network/networkInterfaces/',variables('nicname'))]",
 
         */
