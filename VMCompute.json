@@ -77,9 +77,10 @@
     },
     "functions": [],
     "variables": {
-"storagename": "[concat(parameters('Vmname'),'-storage')]",
+        "vmname": "[parameters('vmname')]",
+"storagename": "[concat(variables('vmname'),'-storage')]",
 
-      "nicname": "[concat(parameters('vmname'),'-nic')]"
+      "nicname": "[concat(variables('vmname'),'-nic')]"
        /*"nicid": "[resourceId('/Microsoft.Network/networkInterfaces/',variables('nicid'))]"*/ 
         
 
@@ -106,7 +107,7 @@
         /*#######################VM compute###################################*/
 
 {
-    "name": "[parameters('Vmname')]",
+    "name": "[parameters('vmname')]",
     "type": "Microsoft.Compute/virtualMachines",
     "apiVersion": "2019-07-01",
     "location": "[resourceGroup().location]",
@@ -116,14 +117,14 @@
         
     ],
     "tags": {
-        "displayName": "[parameters('Vmname')]"
+        "displayName": "[parameters('vmname')]"
     },
     "properties": {
         "hardwareProfile": {
             "vmSize": "[parameters('vmSize')]"
         },
         "osProfile": {
-            "computerName": "[parameters('Vmname')]",
+            "computerName": "[parameters('vmname')]",
             "adminUsername": "[parameters('adminusername')]",
             "adminPassword": "[parameters('adminPassword')]"
         },
