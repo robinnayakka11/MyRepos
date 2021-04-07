@@ -1,28 +1,98 @@
+/*
+
+- Vnet has already been created.
+
+- Keyvault is already created and defined in parameter.
+
+- Existing storage account for boot diagonistic.
+
+- SKU of the vm
+
+        PS G:\azure-devops\Azure TTK\arm-ttk-master> Get-AzVMImageSku
+
+        cmdlet Get-AzVMImageSku at command pipeline position 1
+        Supply values for the following parameters:
+        Location: central india
+        PublisherName: MicrosoftWindowsServer
+        Offer: WindowsServer
+
+- This is Managed disks template
+Default managed disk settings:
+1. When deploying without specifying additional properties, the disk will use a storage type based on the size of the VM. For example, if you are using a VM size that supports premium storage (sizes with "s" in their name such as Standard_D2s_v3) then premium disks will be configured by default. You can change this by using the sku setting of the disk to specify a storage type.
+2. If no name for the disk is specified, it takes the format of <VMName>_OsDisk_1_<randomstring> for the OS disk and <VMName>_disk<#>_<randomstring> for each data disk.
+3. If a VM is being created from a custom image then the default settings for storage account type and disk name are retrieved from the disk properties defined in the custom image resource. These can be overridden by specifying values for these in the template.
+4. By default, Azure disk encryption is disabled.
+5. By default, disk caching is Read/Write for the OS disk and None for data disks.
+6. In the example below there is still a storage account dependency, though this is only for storage of diagnostics and is not needed for disk storage.
+
+
+*/
+
 {
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
+
+        /*################## Windows Compute configuration#######################*/
+
         "vmname": {
             "type": "string",
             "metadata": {
                 "description": "Name of the vm"
+
             }
         },
-        "sku": {
-            "type": "string",
-            "defaultValue": "Standard_LRS",
-            "metadata": {
-                "description": "storage sku - Standard_LRS, Premium_LRS, StandardSSD_LRS, UltraSSD_LRS, Premium_ZRS, StandardSSD_ZRS"
-            }
-        },
+
         "vmSize": {
             "type": "string",
             "defaultValue": "Standard_A2_v2",
             "metadata": {
-                "description": "size of the vm"
+                "description": "size of the vm - Basic_A0,Standard_A0,Standard_A1"
             }
         },
-       
+
+
+        "storageProfilepublisher": {
+            "type": "string",
+            "defaultValue": "MicrosoftWindowsServer",
+            "metadata": {
+                "description": "publisher name"
+            }
+        },
+
+
+        "storageProfileoffer": {
+            "type": "string",
+            "defaultValue": "WindowsServer",
+            "metadata": {
+                "description": "storageProfileoffer"
+            }
+        },
+
+        "storageProfilesku": {
+            "type": "string",
+            "defaultValue": "2012-R2-Datacenter",
+            "metadata": {
+                "description": "storageProfilesku"
+            }
+        },
+        "availabilitySetRG": {
+            "type": "string",
+            "metadata": {
+                "description": "Resource group of availability set"
+            }
+        },
+
+        "availabilitySetname": {
+            "type": "string",
+            "metadata": {
+                "description": "name of the availablity set."
+            }
+        },
+
+
+
+        /*##################Credentials#######################*/
         "adminusername": {
             "type": "string",
             "defaultValue": "admintest",
@@ -32,131 +102,204 @@
         },
         "adminPassword": {
             "type": "string",
-            "defaultValue": "Asdf@123456789",
             "metadata": {
                 "description": "description"
             }
         },
-"storageProfilepublisher": {
-    "type": "string",
-    "defaultValue": "MicrosoftWindowsServer",
-    "metadata": {
-        "description": "publisher name"
-    }
-},
+        /*##################boot diagonistic#######################*/
 
 
-"storageProfileoffer": {
-    "type": "string",
-    "defaultValue": "WindowsServer",
-    "metadata": {
-        "description": "storageProfileoffer"
-    }
-},
+        "bootDiagnosticsStoragepath": {
 
-"storageProfilesku": {
-    "type": "string",
-    "defaultValue": "2012-R2-Datacenter",
-    "metadata": {
-        "description": "storageProfilesku"
-    }
-},
+            "type": "string",
+            "metadata": {
+                "description": "path of boot diagonistic - https://armtemplatestacc.blob.core.windows.net/bootdiagonistic"
+            }
+        },
 
-"osDiskname": {
-    "type": "string",
-    "defaultValue": "windowsVM1OSDisk",
-    "metadata": {
-        "description": "description"
-    }
-}
+        /*##################Disk details#######################*/
+
+
+        "numberofdatadisk": {
+            "type": "string",
+            "metadata": {
+                "description": "number of datadisk to be added"
+            }
+        },
+
+        "SizeOfDiskInGB": {
+            "type": "string",
+            "defaultValue": "1023",
+            "metadata": {
+                "description": "Size of disk in GB - default 1023"
+            }
+        }
 
 
 
 
-        
+
+
+
     },
     "functions": [],
     "variables": {
         "vmname": "[parameters('vmname')]",
-"storagename": "[concat(variables('vmname'),'sto')]",
 
-      "nicname": "[concat(variables('vmname'),'-nic')]"
-       /*"nicid": "[resourceId('/Microsoft.Network/networkInterfaces/',variables('nicid'))]"*/ 
-        
+        "availabilitySetsID": "[concat('/subscriptions/',subscription().subscriptionId,'/resourceGroups/',parameters('availabilitySetRG'),'/providers/Microsoft.Compute/availabilitySets/')]",
+
+        "nicname": "[concat(variables('vmname'),'-nic')]",
+        "location": "[resourceGroup().location]"
+
 
     },
     "resources": [
 
 
-        /*#######################VM Storage###################################*/
-{
-    "name": "[toLower(variables('storagename'))]",
-    "type": "Microsoft.Storage/storageAccounts",
-    "apiVersion": "2019-06-01",
-    "location": "[resourceGroup().location]",
-    "tags": {
-        "displayName": "[toLower(variables('storagename'))]"
-    },
-    "sku": {
-        "name": "[parameters('sku')]"
-    },
-    "kind": "Storage"
-},
 
 
         /*#######################VM compute###################################*/
 
-{
-    "name": "[parameters('vmname')]",
-    "type": "Microsoft.Compute/virtualMachines",
-    "apiVersion": "2019-07-01",
-    "location": "[resourceGroup().location]",
-    "dependsOn": [
-        "[concat(resourceId('Microsoft.Storage/storageAccounts',toLower(variables('storagename'))))]"
-       /* "[concat(resourceId('Microsoft.Network/networkInterfaces/',variables('nicname')))]"*/
-        
-    ],
-    "tags": {
-        "displayName": "[parameters('vmname')]"
-    },
-    "properties": {
-        "hardwareProfile": {
-            "vmSize": "[parameters('vmSize')]"
-        },
-        "osProfile": {
-            "computerName": "[parameters('vmname')]",
-            "adminUsername": "[parameters('adminusername')]",
-            "adminPassword": "[parameters('adminPassword')]"
-        },
-        "storageProfile": {
-            "imageReference": {
-                "publisher": "[parameters('storageProfilepublisher')]",
-                "offer": "[parameters('storageProfileoffer')]",
-                "sku": "[parameters('storageProfilesku')]",
-                "version": "latest"
+        {
+            "name": "[parameters('vmname')]",
+            "type": "Microsoft.Compute/virtualMachines",
+            "apiVersion": "2019-07-01",
+            "location": "[variables('location')]",
+            "dependsOn": [
+                /*"[concat(resourceId('Microsoft.Storage/storageAccounts',toLower(variables('storagename'))))]"
+                /*   "[concat(resourceId('Microsoft.Network/networkInterfaces/',variables('nicname')))]"*/
+
+            ],
+            "tags": {
+                "displayName": "[parameters('vmname')]"
             },
-            "osDisk": {
-                "name": "[parameters('osDiskname')]",
-                "caching": "ReadWrite",
-                "createOption": "FromImage"
-            }
-        },
-        "networkProfile": {
-            "networkInterfaces": [
-                {
-                    "id": "[resourceId('Microsoft.Network/networkInterfaces',variables('nicname'))]"
-          }
-            ]
-        },
-        "diagnosticsProfile": {
-            "bootDiagnostics": {
-                "enabled": true,
-                "storageUri": "[reference(resourceId('Microsoft.Storage/storageAccounts/', toLower(variables('storagename')))).primaryEndpoints.blob]"
+            "properties": {
+                "hardwareProfile": {
+                    "vmSize": "[parameters('vmSize')]"
+                },
+                "availabilitySet": {
+                    "id": "[resourceId(variables('availabilitySetsID'),parameters('availabilitySetname'))]"
+                },
+
+                "osProfile": {
+                    "computerName": "[parameters('vmname')]",
+                    "adminUsername": "[parameters('adminusername')]",
+                    "adminPassword": "[parameters('adminPassword')]"
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "[parameters('storageProfilepublisher')]",
+                        "offer": "[parameters('storageProfileoffer')]",
+                        "sku": "[parameters('storageProfilesku')]",
+                        "version": "latest"
+                    },
+                    "osDisk": {
+
+                        "createOption": "FromImage"
+                    },
+
+                    "dataDisks": [
+                        {
+                            "count": "[parameters('numberofdatadisk')]",
+                            "diskSizeGB": "[parameters('SizeOfDiskInGB')]",
+                            "lun": "[copyIndex('datadisk')]",
+                            "createOption": "Empty"
+                        }
+                    ]
+
+                },
+
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces',variables('nicname'))]"
+                        }
+                    ]
+                },
+                "diagnosticsProfile": {
+
+                    "bootDiagnostics": {
+
+
+                        "enabled": true,
+                        "storageUri": "[parameters('bootDiagnosticsStoragepath')]"
+                    }
+                }
             }
         }
-    }
-}
 
     ],
-    "outputs": {}
+    "outputs": {
+
+        "location": {
+            "type": "string",
+            "value": "[resourceGroup().location]"
+        },
+        "Vmname": {
+            "type": "string",
+            "value": "[parameters('vmname')]"
+        },
+
+        "vmsize": {
+            "type": "string",
+            "value": "[parameters('vmSize')]"
+        },
+
+        "storageProfilepublisher": {
+            "type": "string",
+            "value": "[parameters('storageProfilepublisher')]"
+        },
+
+        "storageProfilesku": {
+            "type": "string",
+            "value": "[parameters('storageProfilesku')]"
+        },
+
+        "availabilitySetRG": {
+            "type": "string",
+            "value": "[parameters('availabilitySetRG')]"
+        },
+
+        "availabilitySetname": {
+            "type": "string",
+            "value": "[parameters('availabilitySetname')]"
+        },
+
+        "adminusername": {
+            "type": "string",
+            "value": "[parameters('adminusername')]"
+        },
+
+        "adminPassword": {
+            "type": "string",
+            "value": "[parameters('adminPassword')]"
+        },
+
+
+
+        "bootDiagnosticsStoragepath": {
+            "type": "string",
+            "value": "[parameters('bootDiagnosticsStoragepath')]"
+        },
+
+        "numberofdatadisk": {
+            "type": "string",
+            "value": "[parameters('numberofdatadisk')]"
+        },
+
+        "SizeOfDiskInGB": {
+            "type": "string",
+            "value": "[parameters('SizeOfDiskInGB')]"
+        },
+
+
+        "nicname": {
+            "type": "string",
+            "value": "[variables('nicname')]"
+        }
+
+
+    }
+
+
 }
