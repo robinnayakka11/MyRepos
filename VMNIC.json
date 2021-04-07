@@ -107,7 +107,7 @@
                             "subnet": {
                                 "id": "[resourceId(parameters('vnetresourcegroupname'),'Microsoft.Network/virtualNetworks/subnets',parameters('vnetname'), parameters('subnetname'))]"
                             },
-                            "publicIPAddress": "[if(equals(parameters('publicIPrequired'),'yes'),reference(variables('piblicipID')),json('null'))]"
+                            "publicIPAddress": "[variables('piblicipID')]"
                         }
                     }
                 ]
