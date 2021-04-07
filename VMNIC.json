@@ -55,13 +55,12 @@
 
 
         "nicname": "[concat(parameters('vmname'),'-nic')]"
-     /*  "nicid": "[resourceId(resourceGroup().name,'/Microsoft.Network/networkInterfaces/',variables('nicname'))]"
-*/ 
-        
+
+
 
     },
-    
-    
+
+
     "resources": [
 
         /*##########################Public IP details############################*/
@@ -108,7 +107,7 @@
                             "subnet": {
                                 "id": "[resourceId(parameters('vnetresourcegroupname'),'Microsoft.Network/virtualNetworks/subnets',parameters('vnetname'), parameters('subnetname'))]"
                             },
-                            "publicIPAddress": "[if(equals(parameters('publicIPrequired'),'yes'),variables('piblicipID'),json('null'))]"
+                            "publicIPAddress": "[if(equals(parameters('publicIPrequired'),'yes'),reference(variables('piblicipID')),json('null'))]"
                         }
                     }
                 ]
@@ -139,6 +138,6 @@
             "value": "[parameters('publicIPrequired')]"
 
         }
-        
+
     }
 }
