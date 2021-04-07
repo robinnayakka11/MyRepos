@@ -257,7 +257,7 @@ Default managed disk settings:
 
         "availabilitySetRG": {
             "type": "string",
-            "value": "[parameters('availabilitySetRG')]"
+            "value": "[toLower(parameters('availabilitySetRG'))]"
         },
 
         "availabilitySetname": {
@@ -297,7 +297,7 @@ Default managed disk settings:
             "type": "string",
             "value": "[variables('nicname')]"
         }
- 
+
 
     }
 
