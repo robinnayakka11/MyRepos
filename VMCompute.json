@@ -35,13 +35,13 @@ Default managed disk settings:
 
         /*################## Windows Compute configuration#######################*/
 
-   "vmname": {
-         "type": "string",
-"defaultValue": "robintestvm",
-         "metadata": {
-             "description": "name of the vm"
-         }
-     },
+        "vmname": {
+            "type": "string",
+            "defaultValue": "robintestvm",
+            "metadata": {
+                "description": "name of the vm"
+            }
+        },
 
         "vmSize": {
             "type": "string",
@@ -71,7 +71,6 @@ Default managed disk settings:
 
         "storageprofilesku": {
             "type": "string",
-          
             "metadata": {
                 "description": "storageprofilesku"
             }
@@ -190,7 +189,7 @@ Default managed disk settings:
                     "imageReference": {
                         "publisher": "[parameters('storageProfilepublisher')]",
                         "offer": "[parameters('storageProfileoffer')]",
-                        "sku": "2012-R2-Datacenter",
+                        "sku": "[parameters('storageprofilesku')]",
                         "version": "latest"
                     },
                     "osDisk": {
