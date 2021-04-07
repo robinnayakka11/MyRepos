@@ -297,7 +297,7 @@ Default managed disk settings:
             "type": "string",
             "value": "[variables('nicname')]"
         }
-
+ 
 
     }
 
