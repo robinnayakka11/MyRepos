@@ -35,12 +35,13 @@ Default managed disk settings:
 
         /*################## Windows Compute configuration#######################*/
 
-  /*   "vmname": {
+   "vmname": {
          "type": "string",
+"defaultValue": "robintestvm",
          "metadata": {
              "description": "name of the vm"
          }
-     },*/
+     },
 
         "vmSize": {
             "type": "string",
