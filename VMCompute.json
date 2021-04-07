@@ -71,7 +71,7 @@ Default managed disk settings:
 
         "storageProfilesku": {
             "type": "string",
-            "defaultValue": "2016-Datacenter",
+          
             "metadata": {
                 "description": "storageProfilesku"
             }
