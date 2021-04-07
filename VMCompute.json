@@ -69,11 +69,11 @@ Default managed disk settings:
             }
         },
 
-        "storageProfilesku": {
+        "storageprofilesku": {
             "type": "string",
           
             "metadata": {
-                "description": "storageProfilesku"
+                "description": "storageprofilesku"
             }
         },
         "availabilitySetRG": {
@@ -190,7 +190,7 @@ Default managed disk settings:
                     "imageReference": {
                         "publisher": "[parameters('storageProfilepublisher')]",
                         "offer": "[parameters('storageProfileoffer')]",
-                        "sku": "[parameters('storageProfilesku')]",
+                        "sku": "[parameters('storageprofilesku')]",
                         "version": "latest"
                     },
                     "osDisk": {
@@ -250,9 +250,9 @@ Default managed disk settings:
             "value": "[parameters('storageProfilepublisher')]"
         },
 
-        "storageProfilesku": {
+        "storageprofilesku": {
             "type": "string",
-            "value": "[parameters('storageProfilesku')]"
+            "value": "[parameters('storageprofilesku')]"
         },
 
         "availabilitySetRG": {
