@@ -190,7 +190,7 @@ Default managed disk settings:
                     "imageReference": {
                         "publisher": "[parameters('storageProfilepublisher')]",
                         "offer": "[parameters('storageProfileoffer')]",
-                        "sku": "[parameters('storageprofilesku')]",
+                        "sku": "2012-R2-Datacenter",
                         "version": "latest"
                     },
                     "osDisk": {
