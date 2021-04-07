@@ -35,13 +35,12 @@ Default managed disk settings:
 
         /*################## Windows Compute configuration#######################*/
 
-        "vmname": {
-            "type": "string",
-            "metadata": {
-                "description": "Name of the vm"
-
-            }
-        },
+     "vmname": {
+         "type": "string",
+         "metadata": {
+             "description": "name of the vm"
+         }
+     },
 
         "vmSize": {
             "type": "string",
