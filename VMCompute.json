@@ -197,8 +197,9 @@ Default managed disk settings:
                         "createOption": "FromImage"
                     },
 
-                    "dataDisks": [
+                    "copy":  [
                         {
+                            "name":"dataDisks",
                             "count": "[parameters('numberofdatadisk')]",
                             "diskSizeGB": "[parameters('SizeOfDiskInGB')]",
                             "lun": "[copyIndex('datadisk')]",
