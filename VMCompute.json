@@ -120,7 +120,7 @@ Default managed disk settings:
 
 
         "numberofdatadisk": {
-            "type": "string",
+            "type": "int",
             "metadata": {
                 "description": "number of datadisk to be added"
             }
@@ -198,7 +198,9 @@ Default managed disk settings:
                     },
 
                     "dataDisks": [
+                     "[not(equals(parameters('numberofdatadisk'),'0'))]",
                         {
+                        
                             "count": "[parameters('numberofdatadisk')]",
                             "diskSizeGB": "[parameters('SizeOfDiskInGB')]",
                             "lun": "[copyIndex('datadisk')]",
