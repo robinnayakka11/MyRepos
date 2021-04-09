@@ -145,7 +145,7 @@ Default managed disk settings:
     "variables": {
         "vmname": "[parameters('vmname')]",
 
-        "availabilitySetsID": "[concat('/subscriptions/',subscription().subscriptionId,'/resourceGroups/',parameters('availabilitySetRG'),'/providers/Microsoft.Compute/availabilitySets/')]",
+        "availabilitySetsID": "[concat('/subscriptions/',subscription().subscriptionId,'/resourceGroups/',parameters('availabilitySetRG'),'/providers/Microsoft.Compute/availabilitySets/',parameters('availabilitySetname'))]",
 
         "nicname": "[concat(variables('vmname'),'-nic')]",
         "location": "[resourceGroup().location]"
@@ -177,7 +177,7 @@ Default managed disk settings:
                     "vmSize": "[parameters('vmSize')]"
                 },
                 "availabilitySet": {
-                    "id": "[resourceId(variables('availabilitySetsID'),parameters('availabilitySetname'))]"
+                    "id": "[variables('availabilitySetsID')]"
                 },
 
                 "osProfile": {
