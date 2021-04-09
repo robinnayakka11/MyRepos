@@ -120,7 +120,7 @@ Default managed disk settings:
 
 
         "numberofdatadisk": {
-            "type": "int",
+            "type": "string",
             "metadata": {
                 "description": "number of datadisk to be added"
             }
