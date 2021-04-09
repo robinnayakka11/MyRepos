@@ -198,7 +198,7 @@ Default managed disk settings:
                     },
 
                     "dataDisks": [
-                     "[not(equals(parameters('numberofdatadisk'),'0'))]",
+                    
                         {
                         
                             "count": "[parameters('numberofdatadisk')]",
