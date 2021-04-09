@@ -197,15 +197,17 @@ Default managed disk settings:
                         "createOption": "FromImage"
                     },
 
-                    "copy":  [
+                    "copy": [
                         {
-                            "name":"dataDisks",
-                            "count": "[parameters('numberofdatadisk')]",
-                            "input":{
-                            "diskSizeGB": "[parameters('SizeOfDiskInGB')]",
-                            "lun": "[copyIndex('datadisk')]",
-                            "createOption": "Empty"
-                        }
+                            "name": "dataDisks",
+                            
+
+                            "input": {
+                                "count": "[parameters('numberofdatadisk')]",
+                                "diskSizeGB": "[parameters('SizeOfDiskInGB')]",
+                                "lun": "[copyIndex('datadisk')]",
+                                "createOption": "Empty"
+                            }
                         }
                     ]
 
