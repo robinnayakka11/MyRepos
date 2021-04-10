@@ -206,8 +206,8 @@ Default managed disk settings:
                          
                                 "diskSizeGB": "[parameters('SizeOfDiskInGB')]",
                                 "lun": "[copyIndex('datadisk')]",
-                                "createOption": "Empty",
-                                 "name": "[concat(parameters('vmname'), '-datadisk',copyIndex('datadisk'))]"
+                                "createOption": "Empty"
+                                 
                             }
                         }
                     ]
