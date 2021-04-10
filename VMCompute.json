@@ -200,7 +200,7 @@ Default managed disk settings:
                             "name": "dataDisks",
                             "count": "[parameters('numberofdatadisk')]",
                             "input": {
-                                 "diskSizeGB": "[parameters('SizeOfDiskInGB')]",
+                                 "diskSizeGB": 1023,
                                 "lun": "[copyIndex('dataDisks')]",
                                 "createOption": "Empty"
 
