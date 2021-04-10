@@ -199,7 +199,7 @@ Default managed disk settings:
 
                     "copy": [
                         {
-                            "name": "dataDisks",
+                            "name": "datadisk",
                   "count": "[parameters('numberofdatadisk')]",
 
                             "input": {
@@ -207,7 +207,7 @@ Default managed disk settings:
                                 "diskSizeGB": "[parameters('SizeOfDiskInGB')]",
                                 "lun": "[copyIndex('datadisk')]",
                                 "createOption": "Empty",
-                                 "name": "[concat(parameters('vmname'), '-datadisk',copyIndex('dataDisks'))]"
+                                 "name": "[concat(parameters('vmname'), '-datadisk',copyIndex('datadisk'))]"
                             }
                         }
                     ]
