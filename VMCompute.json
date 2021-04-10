@@ -200,10 +200,10 @@ Default managed disk settings:
                     "copy": [
                         {
                             "name": "dataDisks",
-                            
+                  "count": "[parameters('numberofdatadisk')]",
 
                             "input": {
-                                "count": "[parameters('numberofdatadisk')]",
+                         
                                 "diskSizeGB": "[parameters('SizeOfDiskInGB')]",
                                 "lun": "[copyIndex('datadisk')]",
                                 "createOption": "Empty"
