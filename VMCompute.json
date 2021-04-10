@@ -192,27 +192,21 @@ Default managed disk settings:
                         "sku": "[parameters('storageprofilesku')]",
                         "version": "latest"
                     },
-                    "osDisk": {
-
-                        "createOption": "FromImage"
-                    },
-
-                    "copy": [
-                        {
-                            "name": "datadisk",
-                  "count": "[parameters('numberofdatadisk')]",
-
-                            "input": {
-                         
-                                "diskSizeGB": "[parameters('SizeOfDiskInGB')]",
-                                "lun": "[copyIndex('datadisk')]",
-                                "createOption": "Empty"
-                                 
-                            }
-                        }
-                    ]
-
-                },
+                "osDisk": {
+            "createOption": "FromImage"
+          },
+          "copy": [
+            {
+              "name": "dataDisks",
+              "count": "[parameters('numberofdatadisk')]",
+              "input": {
+                "diskSizeGB": 1023,
+                "lun": "[copyIndex('dataDisks')]",
+                "createOption": "Empty"
+              }
+            }
+          ]
+        },
 
                 "networkProfile": {
                     "networkInterfaces": [
